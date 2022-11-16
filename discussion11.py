@@ -63,7 +63,15 @@ def add_pets_from_json(filename, cur, conn):
     json_data = json.loads(file_data)
 
     # THE REST IS UP TO YOU
-    pass
+    count = 1
+    for info in json_data:
+        pet_id = count
+        cur.execute("SELECT id FROM Species WHERE title = ?", (info['species'],))
+        species = int(cur.fetchone()[0])   
+        cur.execute("INSERT INTO Patients (id, name, species_id, age, cuteness, aggresiveness) VALUES (?,?,?,?,?,?)",
+            (pet_id, info['name'], species, int(info['age']), int(info['cuteness']), int(info['aggressiveness'])))
+        count += 1
+    conn.commit()
 
 
 # TASK 3
